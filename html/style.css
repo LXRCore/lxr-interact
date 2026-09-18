@@ -1,0 +1,15 @@
+/* LXR-INTERACT — the interaction card on top of lxr-ui.css. No colours here: every value is a kit token. */
+.ia-card { position: fixed; top: 50%; transform: translateY(-50%); min-width: 260px; max-width: 360px; background: var(--lxr-panel-solid); border-left: 1px solid var(--lxr-blood-lit); border-radius: var(--lxr-radius); padding: var(--lxr-s3) var(--lxr-s4) var(--lxr-s2); opacity: 1; transition: opacity var(--lxr-fast) var(--lxr-ease); }
+.ia-card[data-anchor='right'] { right: 8vw; }
+.ia-card[data-anchor='left'] { left: 8vw; }
+.ia-card[data-anchor='center'] { left: 50%; transform: translate(-50%, 40px); top: 50%; }
+.ia-card.lxr-hidden { display: none; }
+.ia-head { display: flex; align-items: center; gap: var(--lxr-s2); padding-bottom: var(--lxr-s2); border-bottom: var(--lxr-hairline) solid var(--lxr-edge); font-size: var(--lxr-text-micro); }
+.ia-logo { width: 18px; height: 18px; object-fit: contain; opacity: .8; }
+.ia-rows { display: flex; flex-direction: column; }
+.ia-row { display: flex; align-items: center; gap: var(--lxr-s3); padding: var(--lxr-s2) 0; border-top: var(--lxr-hairline) solid var(--lxr-edge); position: relative; }
+.ia-row:first-child { border-top: none; }
+.ia-row .lxr-key { min-width: 34px; text-align: center; }
+.ia-row__label { color: var(--lxr-bone); font-size: var(--lxr-text-body); }
+.ia-row__fill { position: absolute; left: 0; bottom: 0; height: 2px; width: 0; background: var(--lxr-blood-lit); transition: width 60ms linear; }
+.lxr.lang-ka .ia-row__label { font-family: var(--lxr-font-ka); }

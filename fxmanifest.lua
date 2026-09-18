@@ -1,78 +1,52 @@
 --[[
-    ████████╗ █████╗ ██████╗  ██████╗ ███████╗████████╗
-       ██╔══╝██╔══██╗██╔══██╗██╔════╝ ██╔════╝╚══██╔══╝
-       ██║   ███████║██████╔╝██║  ███╗█████╗     ██║   
-       ██║   ██╔══██║██╔══██╗██║   ██║██╔══╝     ██║   
-       ██║   ██║  ██║██║  ██║╚██████╔╝███████╗   ██║   
-       ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   
-    
-    🐺 LXR Target - Advanced Interaction & Targeting System
-    
-    ═══════════════════════════════════════════════════════════════════════════════
-    SERVER INFORMATION
-    ═══════════════════════════════════════════════════════════════════════════════
-    
-    Server:      The Land of Wolves 🐺
-    Developer:   iBoss21 / The Lux Empire
-    Website:     https://www.wolves.land
-    Discord:     https://discord.gg/CrKcWdfd3A
-    Store:       https://theluxempire.tebex.io
-    
-    ═══════════════════════════════════════════════════════════════════════════════
-    
+    LXR Core - Interact
+
+    Brand:       LXRCore — Lux Empire eXperience RedM Core
+    Product:     wolves.land / The Land of Wolves
+    Developer:   iBoss21 / LXRCore
+    Website:     https://www.lxrcore.com
+    Discord:     https://discord.gg/ZHMKVYyhBa (development)
+    GitHub:      https://github.com/LXRCore
+
+    Version: 1.0.0
+    Performance Target: 0.00 ms idle
+
     Framework Support:
-    - LXR Core  (Primary)
-    - RSG Core  (Primary)
-    - VORP Core (Supported)
-    - Standalone (Fallback)
-    
-    ═══════════════════════════════════════════════════════════════════════════════
-    
-    © 2026 iBoss21 / The Lux Empire | wolves.land | All Rights Reserved
+    - LXR Core v3 (Native — GetCoreObject / GetLXR)
+
+    © 2026 iBoss21 / LXRCore | lxrcore.com | All Rights Reserved
 ]]
 
 fx_version 'cerulean'
-game       'rdr3'
-
+game 'rdr3'
 rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aware my resources *will* become incompatible once RedM ships.'
+lua54 'yes'
 
-name        'lxr-target'
-author      'iBoss21 / The Lux Empire — wolves.land'
-description 'Advanced interaction & targeting system for LXRCore | RedM | wolves.land'
-version     '5.2.2'
+name 'lxr-interact'
+author 'iBoss21 / LXRCore'
+description 'LXRCore v3 interaction layer: points, zones, models, entities and global targets with gated options on one kit card'
+version '1.0.0'
+repository 'https://github.com/LXRCore/lxr-interact'
+
+shared_scripts {
+    'shared/locale.lua',
+    'locales/*.lua',
+    'config.lua',
+    'shared/rules.lua',
+}
+
+client_script 'client/main.lua'
+server_script 'server/main.lua'
 
 ui_page 'html/index.html'
 
-client_scripts {
-    '@PolyZone/client.lua',
-    '@PolyZone/BoxZone.lua',
-    '@PolyZone/EntityZone.lua',
-    '@PolyZone/CircleZone.lua',
-    '@PolyZone/ComboZone.lua',
-    '@lxr-core/client/locale.lua',
-    'init.lua',
-    'client.lua',
-}
-
-server_scripts {
-    'server.lua',
-}
-
 files {
-    'data/*.lua',
-    'html/*.html',
-    'html/css/*.css',
-    'html/js/*.js'
+    'html/index.html',
+    'html/lxr-ui.css',
+    'html/style.css',
+    'html/fonts/*.woff2',
+    'html/app.js',
+    'html/img/*.png',
 }
 
-lua54 'yes'
-
-dependencies {
-    'PolyZone',
-    'lxr-core'
-}
-
-credits {
-    'Original concept by BerkieB',
-    'Development and optimization by the LXR Development Team'
-}
+dependencies { 'lxr-core' }
