@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.0 — 2026-09-19
+* LXRCore v3 release line: every resource ships as 3.0.0 from here (the entries below are the road to it).
+
 ## 1.1.2 — 2026-09-19
 * Fix: the eye crashed on its first scan — `GetActiveScreenResolution` does not exist in RDR3; `GET_SCREEN_RESOLUTION` now. With 1.1.1 this is the first build where the card, the prompts and the eye all run.
 
