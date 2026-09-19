@@ -226,6 +226,8 @@ local function run(o)
     end
 end
 
+local eye = { on = false, target = nil, menu = false }   -- the eye's state (below); the card scan pauses while it is up
+
 CreateThread(function()
     local holdStart, holdKey = nil, nil
     while true do
@@ -261,8 +263,6 @@ end)
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- 👁️ THE EYE — hold the key, a cursor, point, click, pick
 -- ═══════════════════════════════════════════════════════════════════════════════
-local eye = { on = false, target = nil, menu = false }
-
 -- the world ray under the cursor: camera position + the direction through that pixel
 local function cursorRay(reach)
     local cx, cy = GetNuiCursorPosition()

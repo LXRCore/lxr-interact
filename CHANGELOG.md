@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.1 — 2026-09-19
+* Fix: the card scan loop crashed on the first tick (`attempt to index a nil value 'eye'`) — the eye's state was declared below the loop that reads it. No card, no prompt, no eye until now.
+
 ## 1.1.0 — 2026-09-19
 * The eye: hold Left Alt (`Config.Eye`), a cursor, point at any registered entity / model / global kind / point within reach, click, pick. The card and prompt modes stay.
 * Item gate accepts `{ any = { … } }` — one of them is enough.

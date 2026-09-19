@@ -25,7 +25,7 @@ lua54 'yes'
 name 'lxr-interact'
 author 'iBoss21 / LXRCore'
 description 'LXRCore v3 interaction layer: points, zones, models, entities and global targets with gated options on one kit card'
-version '1.1.0'
+version '1.1.1'
 repository 'https://github.com/LXRCore/lxr-interact'
 
 shared_scripts {
