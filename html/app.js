@@ -21,7 +21,7 @@
   let mx = innerWidth / 2, my = innerHeight / 2, eyeOn = false;
   document.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; if (eyeOn && menu.classList.contains('lxr-hidden')) { eye.style.left = mx + 'px'; eye.style.top = my + 'px'; } });
   document.addEventListener('mousedown', (e) => { if (eyeOn && !menu.classList.contains('lxr-hidden') && !menu.contains(e.target)) { menu.classList.add('lxr-hidden'); post('eye:close'); } });
-  function setEye(on) { eyeOn = on; eye.classList.toggle('lxr-hidden', !on); eye.classList.remove('is-on'); menu.classList.add('lxr-hidden'); if (on) { eye.style.left = mx + 'px'; eye.style.top = my + 'px'; } }
+  function setEye(on) { eyeOn = on; document.documentElement.classList.toggle('is-eye', on); eye.classList.toggle('lxr-hidden', !on); eye.classList.remove('is-on'); menu.classList.add('lxr-hidden'); if (on) { eye.style.left = mx + 'px'; eye.style.top = my + 'px'; } }
   function showMenu(m) {
     if (!m.options) { menu.classList.add('lxr-hidden'); return; }
     document.getElementById('menu-label').textContent = m.label || L['ui.interact'] || 'Interact';

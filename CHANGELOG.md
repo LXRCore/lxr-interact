@@ -1,6 +1,7 @@
 # Changelog
 
 ## 3.0.0 — 2026-09-19
+* The eye is the cursor: the system pointer is hidden while the eye is up (it comes back on the option rows).
 * LXRCore v3 release line: every resource ships as 3.0.0 from here (the entries below are the road to it).
 
 ## 1.1.2 — 2026-09-19
