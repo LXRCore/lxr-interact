@@ -1,6 +1,7 @@
 # Changelog
 
 ## 3.0.0 — 2026-09-19
+* Fix: `LXRCore.PlayerData` stays current — the core object comes back as a copy, so cash, job and metadata never changed after login in this resource. It now listens to `lxr:client:data` / `lxr:client:unloaded` and refreshes its copy.
 * An option's `onSelect` from another resource runs in its own thread (it may yield); failures print with the option's name.
 * The eye is the cursor: the system pointer is hidden while the eye is up (it comes back on the option rows).
 * LXRCore v3 release line: every resource ships as 3.0.0 from here (the entries below are the road to it).
