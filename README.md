@@ -29,6 +29,11 @@ Doors, shops, the bank, the law and the trades all sit on this.
   relayed with the target's network id after a server-side distance check.
 * **Card or prompts** — `Config.Display.mode = 'card'` (the kit card, tap or
   hold) or `'prompts'` for the game's own prompt group.
+* **The eye** — hold **Left Alt** (`Config.Eye.key`, rebindable in the game's
+  settings): a cursor, point it at anything registered up to `Config.Eye.reach`
+  metres, it lights up with the target's name, click, pick an option. Walking up
+  to a point still shows its card; the eye is the way to reach what the card
+  does not — a horse across the street, a body on the ground, a crate on a shelf.
 * **Cost** — one scan every 250 ms while idle; per-frame only while a card is up.
 
 ## Install

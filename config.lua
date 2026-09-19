@@ -63,6 +63,15 @@ Config.Display = {
     holdMs = 0,                 -- 0 tap; >0 hold to confirm (card mode shows a fill)
 }
 
+-- The eye: hold a key, a cursor appears, point it at anything registered, click, pick an option.
+-- Works on top of the card (walking up to a point still shows its card).
+Config.Eye = {
+    enabled  = true,
+    key      = 'LMENU',         -- RegisterKeyMapping name (players rebind it in the game's settings)
+    reach    = 7.0,             -- how far the eye sees (metres)
+    pointHit = 1.5,             -- a point counts when the ray lands within this of it
+}
+
 -- keys handed to options in order when an option does not name its own (control hashes)
 Config.Keys = {
     { hash = 0xF3830D8E, label = 'J' },

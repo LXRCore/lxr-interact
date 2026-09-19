@@ -230,7 +230,7 @@ CreateThread(function()
     local holdStart, holdKey = nil, nil
     while true do
         if not LocalPlayer.state.isLoggedIn then Wait(1000) else
-            local t = scan()
+            local t = (not eye.on) and scan() or nil
             if t then show(t) else hide() end
             if not current then Wait(Config.Scan.idleMs) else
                 local until_ = GetGameTimer() + Config.Scan.activeMs
@@ -258,8 +258,115 @@ CreateThread(function()
     end
 end)
 
-RegisterNetEvent('lxr:client:unloaded', hide)
-AddEventHandler('onResourceStop', function(res) if res == GetCurrentResourceName() then hide() end end)
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- 👁️ THE EYE — hold the key, a cursor, point, click, pick
+-- ═══════════════════════════════════════════════════════════════════════════════
+local eye = { on = false, target = nil, menu = false }
+
+-- the world ray under the cursor: camera position + the direction through that pixel
+local function cursorRay(reach)
+    local cx, cy = GetNuiCursorPosition()
+    local w, h = GetActiveScreenResolution()
+    if not w or w == 0 then return nil end
+    local nx, ny = (cx / w - 0.5) * 2.0, (0.5 - cy / h) * 2.0
+    local rot = GetGameplayCamRot(2)
+    local rz, rx = math.rad(rot.z), math.rad(rot.x)
+    local fwd = vector3(-math.sin(rz) * math.cos(rx), math.cos(rz) * math.cos(rx), math.sin(rx))
+    local right = vector3(math.cos(rz), math.sin(rz), 0.0)
+    local up = vector3(math.sin(rz) * math.sin(rx), -math.cos(rz) * math.sin(rx), math.cos(rx))
+    local tanV = math.tan(math.rad(GetGameplayCamFov()) / 2.0)
+    local dir = fwd + right * (nx * tanV * (w / h)) + up * (ny * tanV)
+    dir = dir / #dir
+    local from = GetGameplayCamCoord()
+    return from, from + dir * reach
+end
+
+local function eyeScan()
+    local p = ped()
+    local from, to = cursorRay(Config.Eye.reach)
+    if not from then return nil end
+    local handle = StartExpensiveSynchronousShapeTestLosProbe(from.x, from.y, from.z, to.x, to.y, to.z, Config.Scan.rayFlags, p, 4)
+    local _, hit, at, _, entity = GetShapeTestResult(handle)
+    local pos = GetEntityCoords(p)
+    if hit and entity and entity ~= 0 and entity ~= p then
+        local dist = #(pos - GetEntityCoords(entity))
+        local list, label, kind = optionsFor(entity, dist)
+        if #list > 0 then return { key = 'e:' .. entity, entity = entity, kind = kind, label = label, raw = list, distance = dist, coords = GetEntityCoords(entity) } end
+    end
+    -- a point near where the ray landed (or, with nothing hit, near its end)
+    local landed = hit and at or to
+    local nearest, nd = nil, math.huge
+    for id, pt in pairs(points) do
+        local d = #(landed - pt.coords)
+        if d <= Config.Eye.pointHit and #(pos - pt.coords) <= math.max(pt.distance, Config.Eye.reach) and d < nd then
+            nearest, nd = { key = 'p:' .. id, label = pt.label, raw = pt.options, distance = #(pos - pt.coords), coords = pt.coords }, d
+        end
+    end
+    return nearest
+end
+
+local function eyeOff()
+    if not eye.on then return end
+    eye.on, eye.target, eye.menu = false, nil, false
+    SetNuiFocus(false, false)
+    SetNuiFocusKeepInput(false)
+    SendNUIMessage({ action = 'eye', on = false })
+end
+
+local function eyeOn()
+    if eye.on or not Config.Eye.enabled or not LocalPlayer.state.isLoggedIn or IsNuiFocused() or IsPauseMenuActive() then return end
+    local md = me().metadata or {}
+    if disabled or (md.isdead and not Config.Scan.whileDead) or (md.ishandcuffed and not Config.Scan.whileCuffed) then return end
+    eye.on = true
+    hide()
+    SetNuiFocus(true, true)
+    SetNuiFocusKeepInput(true)
+    SendNUIMessage({ action = 'eye', on = true })
+    CreateThread(function()
+        while eye.on do
+            DisableControlAction(0, 0xA987235F, true) DisableControlAction(0, 0xD2047988, true)   -- look
+            DisableControlAction(0, 0x07CE1E61, true) DisableControlAction(0, 0xF84FA74F, true)   -- attack / aim
+            DisableControlAction(0, 0x156F7119, true)                                              -- frontend cancel
+            if not eye.menu then
+                local t = eyeScan()
+                if t then
+                    local visible = R.Visible(t.raw, { job = role('job'), gang = role('gang'), count = count, target = t.entity or t.coords, distance = t.distance })
+                    t.options = #visible > 0 and visible or nil
+                end
+                local key = t and t.options and t.key or nil
+                if key ~= (eye.target and eye.target.key) then
+                    eye.target = t and t.options and t or nil
+                    SendNUIMessage({ action = 'eyeTarget', on = eye.target ~= nil, label = eye.target and (eye.target.label or (Config.Kinds[eye.target.kind or ''] or {}).label) or '' })
+                end
+                if eye.target and IsDisabledControlJustReleased(0, 0x07CE1E61) then
+                    eye.menu = true
+                    local rows = {}
+                    for i, o in ipairs(eye.target.options) do rows[i] = { label = o.label, icon = o.icon, key = o.key and o.key.label or '' } end
+                    SendNUIMessage({ action = 'menu', label = eye.target.label or (Config.Kinds[eye.target.kind or ''] or {}).label or '', options = rows })
+                end
+            end
+            Wait(0)
+        end
+    end)
+end
+
+RegisterCommand('+lxr_eye', function() eyeOn() end, false)
+RegisterCommand('-lxr_eye', function() eyeOff() end, false)
+if Config.Eye.enabled then RegisterKeyMapping('+lxr_eye', 'Interact — the eye', 'keyboard', Config.Eye.key) end
+
+RegisterNUICallback('eye:pick', function(d, cb)
+    cb('ok')
+    local t = eye.target
+    local o = t and t.options and t.options[tonumber(d and d.index) or 0]
+    eyeOff()
+    if not o then return end
+    current = t
+    run(o)
+end)
+RegisterNUICallback('eye:close', function(_, cb) cb('ok') if eye.on then eye.menu = false SendNUIMessage({ action = 'menu', options = nil }) end end)
+
+RegisterNetEvent('lxr:client:unloaded', function() hide() eyeOff() end)
+AddEventHandler('onResourceStop', function(res) if res == GetCurrentResourceName() then hide() eyeOff() end end)
 
 -- the core's Brand carries the theme; tell the page once it is known
 CreateThread(function()
