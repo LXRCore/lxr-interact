@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.2 — 2026-09-19
+* Fix: the eye crashed on its first scan — `GetActiveScreenResolution` does not exist in RDR3; `GET_SCREEN_RESOLUTION` now. With 1.1.1 this is the first build where the card, the prompts and the eye all run.
+
 ## 1.1.1 — 2026-09-19
 * Fix: the card scan loop crashed on the first tick (`attempt to index a nil value 'eye'`) — the eye's state was declared below the loop that reads it. No card, no prompt, no eye until now.
 

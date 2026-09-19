@@ -266,8 +266,8 @@ end)
 -- the world ray under the cursor: camera position + the direction through that pixel
 local function cursorRay(reach)
     local cx, cy = GetNuiCursorPosition()
-    local w, h = GetActiveScreenResolution()
-    if not w or w == 0 then return nil end
+    local w, h = Citizen.InvokeNative(0x66773C92835D0909, Citizen.PointerValueInt(), Citizen.PointerValueInt())   -- GET_SCREEN_RESOLUTION (RDR3; there is no GetActiveScreenResolution)
+    if not w or w == 0 or not h or h == 0 then return nil end
     local nx, ny = (cx / w - 0.5) * 2.0, (0.5 - cy / h) * 2.0
     local rot = GetGameplayCamRot(2)
     local rz, rx = math.rad(rot.z), math.rad(rot.x)
