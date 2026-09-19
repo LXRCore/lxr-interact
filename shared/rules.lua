@@ -37,6 +37,10 @@ function R.ItemOk(need, count)
     if need == nil then return true end
     if type(need) == 'string' then return (count(need) or 0) >= 1 end
     if type(need) ~= 'table' then return false end
+    if type(need.any) == 'table' then   -- { any = { 'a', 'b' } }: one of them is enough
+        for _, n in ipairs(need.any) do if (count(n) or 0) >= 1 then return true end end
+        return false
+    end
     for k, v in pairs(need) do
         if type(k) == 'string' then if (count(k) or 0) < (tonumber(v) or 1) then return false end
         elseif (count(v) or 0) < 1 then return false end

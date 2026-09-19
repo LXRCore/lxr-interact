@@ -21,7 +21,7 @@ Doors, shops, the bank, the law and the trades all sit on this.
 * **Looking wins** — the entity in the crosshair (one synchronous ray from
   the camera) is picked over a nearby point; points and zones rank by distance.
 * **Gates** — `job = 'vallaw' | { 'a', 'b' } | { vallaw = 2 }`, `gang` in the
-  same shapes, `item = 'lockpick' | { 'a', 'b' } | { rope = 2 }`,
+  same shapes, `item = 'lockpick' | { 'a', 'b' } (all) | { any = { 'a', 'b' } } (one) | { rope = 2 }`,
   `canInteract(entity, distance, option)`.
 * **Keys** — an option names its key (`'G'` or a control hash) or takes the
   next free one from `Config.Keys`; never two rows on one key.
