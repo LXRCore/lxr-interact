@@ -220,7 +220,12 @@ local function run(o)
     if not t then return end
     local data = { entity = t.entity, netId = t.entity and NetworkGetEntityIsNetworked(t.entity) and NetworkGetNetworkIdFromEntity(t.entity) or nil, coords = t.coords, kind = t.kind, distance = t.distance, args = o.args, label = o.label }
     hide()
-    if type(o.onSelect) == 'function' then o.onSelect(data)
+    if type(o.onSelect) == 'function' then
+        -- the option belongs to another resource: its own thread, so it may yield (an RPC, a progress bar)
+        CreateThread(function()
+            local ok, err = pcall(o.onSelect, data)
+            if not ok then print(('^1[lxr-interact]^7 option "%s" failed: %s'):format(tostring(o.label), type(err) == 'table' and json.encode(err) or tostring(err))) end
+        end)
     elseif o.event then TriggerEvent(o.event, data)
     elseif o.serverEvent then TriggerServerEvent('lxr-interact:server:relay', o.serverEvent, data.netId, data.coords, o.args)
     end

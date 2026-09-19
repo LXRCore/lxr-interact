@@ -1,6 +1,7 @@
 # Changelog
 
 ## 3.0.0 — 2026-09-19
+* An option's `onSelect` from another resource runs in its own thread (it may yield); failures print with the option's name.
 * The eye is the cursor: the system pointer is hidden while the eye is up (it comes back on the option rows).
 * LXRCore v3 release line: every resource ships as 3.0.0 from here (the entries below are the road to it).
 
