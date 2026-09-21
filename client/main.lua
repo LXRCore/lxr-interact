@@ -9,7 +9,8 @@
      © 2026 iBoss21 / LXRCore — All Rights Reserved
      ═══════════════════════════════════════════════════════════════════════════ ]]
 
-local LXRCore = exports['lxr-core']:GetCoreObject()
+local LXRCore = GetResourceState('lxr-core') == 'started' and exports['lxr-core']:GetCoreObject()
+    or { PlayerData = {}, Brand = Config.Brand or { name = 'LXR', theme = 'blood' } }   -- RSG / VORP / standalone: no core, no player filters
 -- LXRCore crosses the export as a copy: its PlayerData would stay what it was at load. The core broadcasts every
 -- change (money, job, metadata) — keep ours current.
 RegisterNetEvent('lxr:client:data', function(d) if type(d) == 'table' then LXRCore.PlayerData = d end end)

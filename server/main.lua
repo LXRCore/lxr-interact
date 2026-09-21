@@ -8,7 +8,8 @@
      © 2026 iBoss21 / LXRCore — All Rights Reserved
      ═══════════════════════════════════════════════════════════════════════════ ]]
 
-local LXRCore = exports['lxr-core']:GetCoreObject()
+local LXRCore = GetResourceState('lxr-core') == 'started' and exports['lxr-core']:GetCoreObject()
+    or { Log = { exploit = function(ch, msg, data) print(('^1[lxr-interact]^7 %s: %s'):format(msg, json.encode(data or {}))) end } }
 local buckets = {}
 
 local function limited(src)

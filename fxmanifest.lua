@@ -49,4 +49,4 @@ files {
     'html/img/*.png',
 }
 
-dependencies { 'lxr-core' }
+-- lxr-core is optional: with it the card honours job / gang / item / metadata filters, without it (RSG, VORP, standalone) every option shows
